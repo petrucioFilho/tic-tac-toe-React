@@ -1,11 +1,15 @@
 import { Button } from "@mui/material";
 import Square from "./Square";
-import { useState } from "react";
 import { calculateWinner } from "../function/function";
 
-function Board() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
+interface BoardProps {
+  xIsNext: boolean;
+  squares: string[];
+  onPlay: (squares: string[]) => void;
+  restart: () => void;
+}
+
+function Board({ xIsNext, squares, onPlay, restart }: BoardProps) {
   const winner = calculateWinner(squares);
   let status;
   if (winner) {
@@ -24,14 +28,7 @@ function Board() {
     } else {
       nextSquares[i] = "O";
     }
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
-  }
-
-  function restart() {
-    setSquares(Array(9).fill(null));
-    setXIsNext(true);
-    status = "Next player: " + (xIsNext ? "X" : "O");
+    onPlay(nextSquares);
   }
 
   return (
